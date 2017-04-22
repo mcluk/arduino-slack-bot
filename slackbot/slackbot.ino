@@ -15,9 +15,10 @@
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
+#include <time.h>
 
 #define SLACK_SSL_FINGERPRINT "AC 95 5A 58 B8 4E 0B CD B3 97 D2 88 68 F5 CA C1 0A 81 E3 6E" // If Slack changes their SSL fingerprint, you would need to update this
-#define SLACK_BOT_TOKEN "put-your-slack-token-here" // Get token by creating new bot integration at https://my.slack.com/services/new/bot 
+String  SLACK_BOT_TOKEN "put-your-slack-token-here"; // Get token by creating new bot integration at https://my.slack.com/services/new/bot 
 #define WIFI_SSID       "wifi-name"
 #define WIFI_PASSWORD   "wifi-password"
 
@@ -172,9 +173,9 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t len) {
   Returns true if the connection was established successfully.
 */
 bool connectToSlack() {
-  // Step 1: Find WebSocket address via RTM API (https://api.slack.com/methods/rtm.start)
+  // Step 1: Find WebSocket address via RTM API (https://api.slack.com/methods/rtm.connect)
   HTTPClient http;
-  http.begin("https://slack.com/api/rtm.start?token=" + SLACK_BOT_TOKEN, SLACK_SSL_FINGERPRINT);
+  http.begin("https://slack.com/api/rtm.connect?token=" + SLACK_BOT_TOKEN, SLACK_SSL_FINGERPRINT);
   int httpCode = http.GET();
 
   if (httpCode != HTTP_CODE_OK) {
